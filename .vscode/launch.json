@@ -1,0 +1,22 @@
+{
+	"configurations": [
+		{
+			"type": "lldb",
+			"request": "launch",
+			"args": [],
+			"cwd": "${workspaceFolder:swift-labs}",
+			"name": "Debug FirstApp",
+			"program": "${workspaceFolder:swift-labs}/.build/debug/FirstApp",
+			"preLaunchTask": "swift: Build Debug FirstApp"
+		},
+		{
+			"type": "lldb",
+			"request": "launch",
+			"args": [],
+			"cwd": "${workspaceFolder:swift-labs}",
+			"name": "Release FirstApp",
+			"program": "${workspaceFolder:swift-labs}/.build/release/FirstApp",
+			"preLaunchTask": "swift: Build Release FirstApp"
+		}
+	]
+}

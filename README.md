@@ -6,6 +6,6 @@
 
 ## How does it work?
 
-![alt text](image.png)
+![alt text](image-1.png)
 
 _Made by Denys Harkavenko, PD-31_

@@ -18,41 +18,45 @@ const deleteTempFile = (fileName) => {
 	})
 }
 
-rl.question('Select the lab number: ', (labNumber) => {
-	rl.question('Enter the task number: ', (taskNumber) => {
-		const labDir = `lab-${labNumber}`
-		const taskFile = `task${taskNumber}.swift`
+rl.question('Enter the directory name (lab or pr): ', (dirPrefix) => {
+	rl.question('Enter the number: ', (number) => {
+		const dirName = `${dirPrefix}-${number}`
+		rl.question('Enter the task number: ', (taskNumber) => {
+			const taskFile = `task${taskNumber}.swift`
 
-		console.log(`Starting file: Sources/${labDir}/${taskFile}`)
+			console.log(`Starting file: Sources/${dirName}/${taskFile}`)
 
-		exec(
-			`del temp.exe & swiftc -o temp.exe Sources/${labDir}/${taskFile}`,
-			(error, stdout, stderr) => {
-				if (error) {
-					console.error(`❌ Compilation error: ${error.message}`)
-					console.error(`❌ Compiler output:\n${stderr}`)
-					return
+			exec(
+				`del temp.exe & swiftc -o temp.exe Sources/${dirName}/${taskFile}`,
+				(error, stdout, stderr) => {
+					if (error) {
+						console.error(`❌ Compilation error: ${error.message}`)
+						console.error(`❌ Compiler output:\n${stderr}`)
+						return
+					}
+					console.log('\n✅ Compilation successful, running...\n')
+
+					console.log(
+						`\n===== ${dirPrefix} ${number}, Task ${taskNumber} =====\n`
+					)
+					const process = spawn('temp.exe', { stdio: 'inherit' })
+
+					process.on('error', (err) => {
+						console.error(`❌ Execution error: ${err.message}`)
+					})
+
+					process.on('exit', (code) => {
+						console.log('\n==============')
+						console.log(`\n✅ Program finished with exit code: ${code}\n`)
+
+						deleteTempFile('temp.exe')
+						deleteTempFile('temp.exp')
+						deleteTempFile('temp.lib')
+					})
 				}
-				console.log('\n✅ Compilation successful, running...\n')
+			)
 
-				console.log(`\n===== Lab ${labNumber}, Task ${taskNumber} =====\n`)
-				const process = spawn('temp.exe', { stdio: 'inherit' })
-
-				process.on('error', (err) => {
-					console.error(`❌ Execution error: ${err.message}`)
-				})
-
-				process.on('exit', (code) => {
-					console.log('\n==============')
-					console.log(`\n✅ Program finished with exit code: ${code}\n`)
-
-					deleteTempFile('temp.exe')
-					deleteTempFile('temp.exp')
-					deleteTempFile('temp.lib')
-				})
-			}
-		)
-
-		rl.close()
+			rl.close()
+		})
 	})
 })
